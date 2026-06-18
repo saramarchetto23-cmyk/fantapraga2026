@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌃 FantaPraga 2026 🌉</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>🏰 FantaScozia 2026 🏴󠁧󠁢󠁳󠁣󠁴󠁿</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0c0c1a 0%, #1a0033 50%, #667eea 100%);
+      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
       color: white; min-height: 100vh; position: relative;
     }
     header {
@@ -18,7 +18,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.2);
     }
     h1 {
-      font-size: 2.4rem; background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      font-size: 2.4rem; background: linear-gradient(45deg, #00d2ff, #3a7bd5);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
     }
@@ -45,7 +45,7 @@
     }
     button[type="submit"] {
       padding: 10px 20px; border-radius: 8px; border: none;
-      background: #667eea; color: white; cursor: pointer; font-weight: bold;
+      background: #3a7bd5; color: white; cursor: pointer; font-weight: bold;
     }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -61,20 +61,22 @@
     .log { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; max-height: 180px; overflow-y: auto; }
     .log-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #444; align-items: center; }
     
-    /* STILI CLASSIFICA ORIGINALI */
     .rankings { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; margin-bottom: 1rem; }
     .rank { text-align: center; }
     .rank h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
     .badge-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.2rem; }
     .badge-points { font-size: 0.9rem; opacity: 0.9; }
     caption { text-align: left; font-weight: 600; margin-bottom: 0.5rem; }
+
+    .sync-zone { display: flex; gap: 10px; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+    .btn-sync { background: rgba(255,255,255,0.15); border: 1px dashed rgba(255,255,255,0.4); padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 500; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🌃 FantaPraga 2026 🌉</h1>
-  <p>Sara, Vera, Marta, Ale (Cami solo Previsioni!)</p>
+  <h1>🏰 FantaScozia 2026 🏴󠁧󠁢󠁳󠁣󠁴󠁿</h1>
+  <p>Punteggi, Previsioni e Classifiche per Sara, Irene e Luca</p>
   <nav>
     <button onclick="openTab('previsioni')" id="tab-previsioni" class="active">🔮 Previsioni</button>
     <button onclick="openTab('eventi')" id="tab-eventi">🎯 Eventi</button>
@@ -86,18 +88,18 @@
   <section id="previsioni" class="active">
     <div class="glass">
       <h2>🔮 Gestione Previsioni</h2>
-      <p style="font-size:0.85rem; opacity:0.8">Max 3 a testa. Moltiplicatore 1.5x se accadono.</p>
+      <p style="font-size:0.85rem; opacity:0.8">Ogni partecipante può inserire fino a 3 previsioni. Bonus 1.5x se si avverano.</p>
       <form id="form-previsione">
         <input type="hidden" id="edit-id">
         <select id="p-chi">
-          <option>Sara</option><option>Vera</option><option>Marta</option><option>Ale</option><option>Cami</option>
+          <option>Sara</option><option>Irene</option><option>Luca</option>
         </select>
         <input id="p-cosa" placeholder="Cosa succederà?" required>
         <input id="p-punti" type="number" placeholder="Punti base" required>
         <button type="submit" id="p-btn">Aggiungi</button>
       </form>
       <table>
-        <thead><tr><th>Persona</th><th>Evento</th><th>Punti Base</th><th>Accaduto?</th><th>Azioni</th></tr></thead>
+        <thead><tr><th>Chi</th><th>Previsione</th><th>Punti Base</th><th>Accaduto?</th><th>Azioni</th></tr></thead>
         <tbody id="lista-previsioni"></tbody>
       </table>
     </div>
@@ -107,7 +109,7 @@
     <div class="glass">
       <h2>🎯 Lista Eventi Disponibili</h2>
       <form id="form-crea-evento">
-        <input id="e-nome" placeholder="Nome evento (es. Birra gigante)" required>
+        <input id="e-nome" placeholder="Nome attività (es. Avvistato Nessie)" required>
         <input id="e-punti" type="number" placeholder="Punteggio" required>
         <button type="submit">Crea Evento</button>
       </form>
@@ -118,15 +120,15 @@
     </div>
 
     <div class="glass">
-      <h2>📝 Registra Attività</h2>
+      <h2>📝 Registra Attività Svolta</h2>
       <form id="form-assegna">
         <select id="sel-evento"></select>
         <select id="sel-chi">
-          <option>Sara</option><option>Vera</option><option>Marta</option><option>Ale</option>
+          <option>Sara</option><option>Irene</option><option>Luca</option>
         </select>
         <button type="submit" style="background:#2ecc71">Registra + Punti</button>
       </form>
-      <h3 style="margin-top:1rem;">Cronologia Eventi (Log)</h3>
+      <h3 style="margin-top:1rem;">Cronologia Azioni (Log Modificabile)</h3>
       <div id="log-eventi" class="log"></div>
     </div>
   </section>
@@ -146,39 +148,44 @@
       <div class="glass rank">
         <h3>🔮 Miglior Veggente</h3>
         <div class="badge-name" id="veg-nome">-</div>
-        <div class="badge-points" id="veg-punti">0 previsioni giuste</div>
+        <div class="badge-points" id="veg-punti">0 giuste</div>
       </div>
     </div>
 
     <div class="glass">
       <table>
-        <caption>Riepilogo punti</caption>
+        <caption>Tabellone Generale</caption>
         <thead>
-          <tr><th>Persona</th><th>Punti Eventi</th><th>Punti Prev.</th><th>Totale</th></tr>
+          <tr><th>Partecipante</th><th>Punti Eventi</th><th>Punti Previsioni</th><th>Totale</th></tr>
         </thead>
         <tbody id="corpo-classifica"></tbody>
       </table>
     </div>
   </section>
+
+  <div class="sync-zone">
+    <button class="btn-sync" onclick="exportDati()">💾 Esporta Salvataggio</button>
+    <button class="btn-sync" onclick="document.getElementById('import-file').click()">📂 Importa Aggiornamento</button>
+    <input type="file" id="import-file" style="display:none" accept=".json" onchange="importDati(this)">
+  </div>
 </main>
 
 <script>
-  // --- STATO ---
-  let previsioni = JSON.parse(localStorage.getItem('fp_prev_v2') || '[]');
-  let eventi = JSON.parse(localStorage.getItem('fp_ev_v2') || '[]');
-  let log = JSON.parse(localStorage.getItem('fp_log_v2') || '[]');
+  // --- STATO DATI ---
+  let previsioni = JSON.parse(localStorage.getItem('fs_prev') || '[]');
+  let eventi = JSON.parse(localStorage.getItem('fs_ev') || '[]');
+  let log = JSON.parse(localStorage.getItem('fs_log') || '[]');
 
-  const personeTutte = ['Sara', 'Vera', 'Marta', 'Ale', 'Cami'];
-  const personeGiocanoEventi = ['Sara', 'Vera', 'Marta', 'Ale'];
+  const partecipanti = ['Sara', 'Irene', 'Luca'];
 
   function save() {
-    localStorage.setItem('fp_prev_v2', JSON.stringify(previsioni));
-    localStorage.setItem('fp_ev_v2', JSON.stringify(eventi));
-    localStorage.setItem('fp_log_v2', JSON.stringify(log));
+    localStorage.setItem('fs_prev', JSON.stringify(previsioni));
+    localStorage.setItem('fs_ev', JSON.stringify(eventi));
+    localStorage.setItem('fs_log', JSON.stringify(log));
     updateUI();
   }
 
-  // --- NAVIGAZIONE ---
+  // --- SEZIONI ---
   window.openTab = function(name) {
     document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -187,7 +194,7 @@
     updateUI();
   }
 
-  // --- PREVISIONI (Aggiunta, Modifica, Eliminazione) ---
+  // --- LOGICA PREVISIONI ---
   document.getElementById('form-previsione').onsubmit = function(e) {
     e.preventDefault();
     const id = document.getElementById('edit-id').value;
@@ -231,7 +238,7 @@
     window.scrollTo(0,0);
   };
 
-  // --- EVENTI ---
+  // --- LOGICA EVENTI ---
   document.getElementById('form-crea-evento').onsubmit = function(e) {
     e.preventDefault();
     eventi.push({ id: Date.now(), nome: document.getElementById('e-nome').value, punti: parseInt(document.getElementById('e-punti').value) });
@@ -259,12 +266,44 @@
     save();
   };
 
-  // --- UPDATE UI & CLASSIFICA ---
+  // --- CONDIVISIONE / AGGIORNAMENTO DATI ---
+  window.exportDati = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({previsioni, eventi, log}));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "fantascozia_backup.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
+
+  window.importDati = (input) => {
+    const reader = new FileReader();
+    reader.onload = function(){
+      try {
+        const data = JSON.parse(reader.result);
+        if(data.previsioni && data.eventi && data.log) {
+          previsioni = data.previsioni;
+          eventi = data.eventi;
+          log = data.log;
+          save();
+          alert("Dati aggiornati con successo!");
+        } else {
+          alert("File non valido.");
+        }
+      } catch (e) {
+        alert("Errore nel caricamento del file.");
+      }
+    };
+    reader.readAsText(input.files[0]);
+  };
+
+  // --- AGGIORNAMENTO INTERFACCIA E CLASSIFICHE ---
   function updateUI() {
-    // Tabella Previsioni
+    // Render Previsioni
     document.getElementById('lista-previsioni').innerHTML = previsioni.map(p => `
       <tr>
-        <td>${p.persona}</td>
+        <td><strong>${p.persona}</strong></td>
         <td>${p.cosa}</td>
         <td>${p.punti}</td>
         <td><button class="pill-btn btn-toggle ${p.accaduto?'':'off'}" onclick="togglePrev(${p.id})">${p.accaduto?'✅ Sì':'❌ No'}</button></td>
@@ -275,65 +314,65 @@
       </tr>
     `).join('');
 
-    // Tabella Lista Eventi
+    // Render Eventi Creati
     document.getElementById('lista-eventi-disponibili').innerHTML = eventi.map(e => `
       <tr><td>${e.nome}</td><td>${e.punti}</td><td><button class="pill-btn btn-del" onclick="delEv(${e.id})">🗑️</button></td></tr>
     `).join('');
 
-    // Select Eventi
+    // Select Eventi da assegnare
     document.getElementById('sel-evento').innerHTML = eventi.map(e => `<option value="${e.id}">${e.nome} (${e.punti} pt)</option>`).join('');
 
-    // Log Eventi
+    // Log Attività
     document.getElementById('log-eventi').innerHTML = log.map(l => `
       <div class="log-item">
-        <span><strong>${l.chi}</strong>: ${l.cosa} (+${l.punti})</span>
-        <button class="pill-btn btn-del" style="font-size:0.7rem" onclick="undoLog(${l.id})">Annulla</button>
+        <span><strong>${l.chi}</strong>: ${l.cosa} (+${l.punti} pt)</span>
+        <button class="pill-btn btn-del" style="font-size:0.7rem; padding: 2px 8px;" onclick="undoLog(${l.id})">Annulla</button>
       </div>
     `).join('');
 
-    // --- LOGICA CLASSIFICA ---
+    // Conteggi Classifiche
     let stats = {};
-    personeTutte.forEach(p => stats[p] = { ev: 0, pr: 0, nOk: 0, tot: 0 });
+    partecipanti.forEach(p => stats[p] = { ev: 0, pr: 0, nOk: 0, tot: 0 });
 
     log.forEach(l => { if(stats[l.chi]) stats[l.chi].ev += l.punti; });
     previsioni.forEach(p => {
-      if(p.accaduto) {
+      if(p.accaduto && stats[p.persona]) {
         stats[p.persona].pr += (p.punti * 1.5);
         stats[p.persona].nOk += 1;
       }
     });
-    personeTutte.forEach(p => stats[p].tot = stats[p].ev + stats[p].pr);
+    partecipanti.forEach(p => stats[p].tot = stats[p].ev + stats[p].pr);
 
-    // Tabella Classifica
-    document.getElementById('corpo-classifica').innerHTML = personeTutte.map(p => `
+    // Tabella Finale
+    document.getElementById('corpo-classifica').innerHTML = partecipanti.map(p => `
       <tr>
         <td><strong>${p}</strong></td>
-        <td>${stats[p].ev}</td>
-        <td>${stats[p].pr.toFixed(1)}</td>
-        <td><strong>${stats[p].tot.toFixed(1)}</strong></td>
+        <td>${stats[p].ev} pt</td>
+        <td>${stats[p].pr.toFixed(1)} pt</td>
+        <td><strong>${stats[p].tot.toFixed(1)} pt</strong></td>
       </tr>
     `).join('');
 
-    // Calcolo Badge
+    // Assegnazione Badge Podio
     let mvp = { nome: '-', punti: -1 };
     let bestE = { nome: '-', punti: -1 };
     let bestV = { nome: '-', n: -1 };
 
-    personeTutte.forEach(p => {
+    partecipanti.forEach(p => {
       if(stats[p].tot > mvp.punti) mvp = { nome: p, punti: stats[p].tot };
       if(stats[p].ev > bestE.punti) bestE = { nome: p, punti: stats[p].ev };
       if(stats[p].nOk > bestV.n) bestV = { nome: p, n: stats[p].nOk };
     });
 
     document.getElementById('mvp-nome').innerText = mvp.nome;
-    document.getElementById('mvp-punti').innerText = mvp.punti.toFixed(1) + " punti totali";
+    document.getElementById('mvp-punti').innerText = mvp.punti.toFixed(1) + " pt totali";
     document.getElementById('bp-nome').innerText = bestE.nome;
-    document.getElementById('bp-punti').innerText = bestE.punti + " punti eventi";
+    document.getElementById('bp-punti').innerText = bestE.punti + " pt eventi";
     document.getElementById('veg-nome').innerText = bestV.nome;
-    document.getElementById('veg-punti').innerText = bestV.n + " previsioni giuste";
+    document.getElementById('veg-punti').innerText = bestV.n + " indovinate";
   }
 
-  // Init
+  // Esecuzione al caricamento
   updateUI();
 </script>
 
