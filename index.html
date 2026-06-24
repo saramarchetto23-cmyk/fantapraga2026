@@ -1,342 +1,467 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🏰 FantaScozia 2026 🏴󠁧󠁢󠁳󠁣󠁴󠁿</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-      color: white; min-height: 100vh; position: relative;
-    }
-    header {
-      text-align: center; padding: 2rem 1rem;
-      background: rgba(255,255,255,0.06); backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-    }
-    h1 {
-      font-size: 2.4rem; background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
-    }
-    nav { display: flex; justify-content: center; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
-    nav button {
-      padding: 0.6rem 1.3rem; background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.25); color: white;
-      border-radius: 999px; cursor: pointer; transition: 0.2s;
-    }
-    nav button.active { background: rgba(255,255,255,0.4); }
-    main { padding: 1.5rem 1rem; max-width: 1100px; margin: 0 auto; }
-    section { display: none; }
-    section.active { display: block; animation: fadeIn 0.3s; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .glass {
-      background: rgba(255,255,255,0.10); backdrop-filter: blur(18px);
-      border-radius: 18px; border: 1px solid rgba(255,255,255,0.2);
-      padding: 1.5rem; margin-bottom: 1.5rem;
-    }
-    form { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
-    input, select {
-      padding: 10px; border-radius: 8px; border: none;
-      background: rgba(0,0,0,0.4); color: white; flex: 1 1 150px;
-    }
-    button[type="submit"] {
-      padding: 10px 20px; border-radius: 8px; border: none;
-      background: #3a7bd5; color: white; cursor: pointer; font-weight: bold;
-    }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    th { background: rgba(255,255,255,0.1); }
-    .pill-btn {
-      padding: 5px 12px; border-radius: 20px; border: none;
-      cursor: pointer; font-size: 0.8rem; font-weight: bold; margin: 2px;
-    }
-    .btn-del { background: #ff4757; color: white; }
-    .btn-edit { background: #f1c40f; color: black; }
-    .btn-toggle { background: #2ecc71; color: white; }
-    .btn-toggle.off { background: #555; }
-    .log { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; max-height: 180px; overflow-y: auto; }
-    .log-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #444; align-items: center; }
-    
-    .rankings { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; margin-bottom: 1rem; }
-    .rank { text-align: center; }
-    .rank h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
-    .badge-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.2rem; }
-    .badge-points { font-size: 0.9rem; opacity: 0.9; }
-    caption { text-align: left; font-weight: 600; margin-bottom: 0.5rem; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚔️ FantaScozia 2026 ⚔️</title>
+    <!-- Google Fonts per un tocco epico/trash -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff0055;
+            --secondary: #00ffcc;
+            --scotland-blue: #0065bf;
+            --dark-bg: #1a0d2e;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            /* Sfondo Trash/Epico: Castelli e colline scozzesi medievali */
+            background-image: 
+                linear-gradient(rgba(26, 13, 46, 0.85), rgba(26, 13, 46, 0.95)),
+                url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header Scoppiettante */
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(45deg, var(--scotland-blue), var(--primary));
+            border: 4px solid var(--secondary);
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.6);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.5); }
+            100% { transform: scale(1.02); box-shadow: 0 0 30px rgba(255, 0, 85, 0.8); }
+        }
+
+        header h1 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.8rem;
+            margin: 0;
+            color: #fff;
+            text-shadow: 3px 3px 0px #000, 0 0 10px var(--secondary);
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            text-shadow: 1px 1px 2px #000;
+            margin: 10px 0 0 0;
+            font-weight: bold;
+        }
+
+        /* Sezioni stile fortezza */
+        .card {
+            background: rgba(20, 10, 35, 0.85);
+            border: 3px solid var(--scotland-blue);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 5px 5px 0px var(--primary);
+            backdrop-filter: blur(5px);
+        }
+
+        h2 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--secondary);
+            border-bottom: 2px dashed var(--primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Leaderboard Trash Style */
+        .leaderboard-rank {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg, rgba(0,101,191,0.3), rgba(255,0,85,0.3));
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid var(--secondary);
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .leaderboard-rank:hover {
+            transform: translateX(10px) scale(1.02);
+            background: linear-gradient(90deg, var(--scotland-blue), var(--primary));
+        }
+
+        /* Form e Input */
+        select, input, button {
+            font-family: 'Space Grotesk', sans-serif;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--scotland-blue);
+            background: #110724;
+            color: white;
+            font-size: 1rem;
+            margin: 5px 0;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.2s;
+            box-shadow: 3px 3px 0 var(--secondary);
+        }
+
+        button:hover {
+            background: var(--secondary);
+            color: var(--dark-bg);
+            box-shadow: 3px 3px 0 var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: #ff3333;
+            box-shadow: 2px 2px 0 #000;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Liste e Log */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .badge {
+            background: gold;
+            color: black;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: flash 1s infinite alternate;
+        }
+
+        @keyframes flash {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; box-shadow: 0 0 8px gold; }
+        }
+
+        .trash-icon {
+            font-size: 1.5rem;
+            vertical-align: middle;
+        }
+    </style>
+
+    <!-- Firebase SDK standard -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-<header>
-  <h1>🏰 FantaScozia 2026 🏴󠁧󠁢󠁳󠁣󠁴󠁿</h1>
-  <p>Sincronizzazione globale per Sara, Irene e Luca</p>
-  <nav>
-    <button onclick="openTab('previsioni')" id="tab-previsioni" class="active">🔮 Previsioni</button>
-    <button onclick="openTab('eventi')" id="tab-eventi">🎯 Eventi</button>
-    <button onclick="openTab('classifica')" id="tab-classifica">🏆 Classifica</button>
-  </nav>
-</header>
+    <div class="container">
+        <header>
+            <h1>🏰 FantaScozia 2026 🏰</h1>
+            <p>🎺 Il torneo scozzese più trash della storia 🎺</p>
+        </header>
 
-<main>
-  <!-- PREVISIONI -->
-  <section id="previsioni" class="active">
-    <div class="glass">
-      <h2>🔮 Gestione Previsioni</h2>
-      <form id="form-previsione">
-        <input type="hidden" id="edit-id">
-        <select id="p-chi">
-          <option>Sara</option><option>Irene</option><option>Luca</option>
-        </select>
-        <input id="p-cosa" placeholder="Cosa succederà?" required>
-        <input id="p-punti" type="number" placeholder="Punti base" required>
-        <button type="submit" id="p-btn">Aggiungi</button>
-      </form>
-      <table>
-        <thead><tr><th>Chi</th><th>Previsioni</th><th>Punti</th><th>OK?</th><th>Azioni</th></tr></thead>
-        <tbody id="lista-previsioni"></tbody>
-      </table>
-    </div>
-  </section>
+        <!-- 1. CLASSIFICA LIVE -->
+        <div class="card">
+            <h2>📊 Classifica Reale</h2>
+            <div id="leaderboard">
+                <!-- Generata via JS -->
+            </div>
+        </div>
 
-  <!-- EVENTI -->
-  <section id="eventi">
-    <div class="glass">
-      <h2>🎯 Lista Eventi Disponibili</h2>
-      <form id="form-crea-evento">
-        <input id="e-nome" placeholder="Nome attività" required>
-        <input id="e-punti" type="number" placeholder="Punteggio" required>
-        <button type="submit">Crea Evento</button>
-      </form>
-      <table>
-        <thead><tr><th>Evento</th><th>Punti</th><th>Azione</th></tr></thead>
-        <tbody id="lista-eventi-disponibili"></tbody>
-      </table>
-    </div>
+        <!-- 2. GESTIONE PREVISIONI -->
+        <div class="card">
+            <h2>🔮 Libro delle Profezie <span class="trash-icon">🦄</span></h2>
+            <p style="font-size: 0.9rem; color: #aaa;">Massimo 3 previsioni a testa. Niente moltiplicatori, 1 punto assegnato è 1 punto reale!</p>
+            <div class="grid-3">
+                <div>
+                    <label>Chi vaticina?</label>
+                    <select id="prediction-user" style="width: 100%;">
+                        <option value="Sara">Sara</option>
+                        <option value="Irene">Irene</option>
+                        <option value="Luca">Luca</option>
+                    </select>
+                </div>
+                <div>
+                    <label>La Profezia (Cosa succederà?)</label>
+                    <input type="text" id="prediction-text" placeholder="Es: Luca si perde nelle Highlands" style="width: 90%;">
+                </div>
+                <div>
+                    <label>&nbsp;</label>
+                    <button onclick="addPrediction()" style="width: 100%; margin-top: 5px;">Sancisci 📜</button>
+                </div>
+            </div>
+            <h3>Previsioni Attive</h3>
+            <ul id="predictions-list"></ul>
+        </div>
 
-    <div class="glass">
-      <h2>📝 Registra Attività Svolta</h2>
-      <form id="form-assegna">
-        <select id="sel-evento"></select>
-        <select id="sel-chi">
-          <option>Sara</option><option>Irene</option><option>Luca</option>
-        </select>
-        <button type="submit" style="background:#2ecc71">Registra + Punti</button>
-      </form>
-      <h3>Cronologia Azioni Live (Log)</h3>
-      <div id="log-eventi" class="log"></div>
-    </div>
-  </section>
+        <!-- 3. CREAZIONE EVENTI DI GIOCO -->
+        <div class="card">
+            <h2>⚡ Assegna Punti (Eventi sul Campo)</h2>
+            <div class="grid-3">
+                <div>
+                    <label>Vittima/Eroe:</label>
+                    <select id="event-user" style="width: 100%;">
+                        <option value="Sara">Sara</option>
+                        <option value="Irene">Irene</option>
+                        <option value="Luca">Luca</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Cosa è successo di trash?</label>
+                    <input type="text" id="event-text" placeholder="Es: Beve whisky da una cornamusa" style="width: 90%;">
+                </div>
+                <div>
+                    <label>Punti (+ o -)</label>
+                    <input type="number" id="event-points" value="10" style="width: 80%;">
+                </div>
+            </div>
+            <button onclick="addEvent()" style="width: 100%; margin-top: 15px;">Scatena Evento 🔥</button>
+        </div>
 
-  <!-- CLASSIFICA -->
-  <section id="classifica">
-    <div class="rankings">
-      <div class="glass rank">
-        <h3>👑 MVP (Totale)</h3>
-        <div class="badge-name" id="mvp-nome">-</div>
-        <div class="badge-points" id="mvp-punti">0 pt</div>
-      </div>
-      <div class="glass rank">
-        <h3>⭐ Best Player (Eventi)</h3>
-        <div class="badge-name" id="bp-nome">-</div>
-        <div class="badge-points" id="bp-punti">0 pt</div>
-      </div>
-      <div class="glass rank">
-        <h3>🔮 Miglior Veggente</h3>
-        <div class="badge-name" id="veg-nome">-</div>
-        <div class="badge-points" id="veg-punti">0 indovinate</div>
-      </div>
+        <!-- 4. LOG CRONOLOGICO -->
+        <div class="card">
+            <h2>📜 Registro delle Gesta Scozzesi</h2>
+            <ul id="events-log"></ul>
+        </div>
     </div>
 
-    <div class="glass">
-      <table>
-        <thead><tr><th>Partecipante</th><th>Punti Eventi</th><th>Punti Prev.</th><th>Totale</th></tr></thead>
-        <tbody id="corpo-classifica"></tbody>
-      </table>
-    </div>
-  </section>
-</main>
+    <script>
+        // --- CONFIGURAZIONE FIREBASE AGGIORNATA ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3vgcN1g_K_8N1gJUYKp569RvHVm0ZF3o",
+            authDomain: "fantascozia.firebaseapp.com",
+            databaseURL: "https://fantascozia-default-rtdb.europe-west1.firebasedatabase.app/",
+            projectId: "fantascozia",
+            storageBucket: "fantascozia.firebasestorage.app",
+            messagingSenderId: "659824105623",
+            appId: "1:659824105623:web:bbf87a1d10c7cd5564b1d2",
+            measurementId: "G-5C0HLJX16J"
+        };
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        // Inizializzazione
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyD3vgcN1g_K_8N1gJUYKp569RvHVm0ZF3o",
-    authDomain: "fantascozia.firebaseapp.com",
-    databaseURL: "https://fantascozia-default-rtdb.europe-west1.firebasedatabase.app/",
-    projectId: "fantascozia",
-    storageBucket: "fantascozia.firebasestorage.app",
-    messagingSenderId: "659824105623",
-    appId: "1:659824105623:web:bbf87a1d10c7cd5564b1d2",
-    measurementId: "G-5C0HLJX16J"
-  };
+        // Stato Locale
+        let players = { Sara: 0, Irene: 0, Luca: 0 };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+        // --- CARICAMENTO E AGGIORNAMENTO LIVE ---
+        db.ref('/').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            const predictions = data.predictions || {};
+            const events = data.events || {};
 
-  let databaseState = { previsioni: [], eventi: [], log: [] };
-  const partecipanti = ['Sara', 'Irene', 'Luca'];
+            // Reset punteggi
+            players = { Sara: 0, Irene: 0, Luca: 0 };
 
-  // Legge e ascolta TUTTO in tempo reale
-  onValue(ref(db, 'fantascozia_v3'), (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      databaseState.previsioni = data.previsioni || [];
-      databaseState.eventi = data.eventi || [];
-      databaseState.log = data.log || [];
-    } else {
-      databaseState = { previsioni: [], eventi: [], log: [] };
-    }
-    updateUI();
-  });
+            // 1. Calcola i punti dagli eventi reali
+            Object.values(events).forEach(evt => {
+                if (players[evt.user] !== undefined) {
+                    players[evt.user] += parseInt(evt.points || 0);
+                }
+            });
 
-  function dbPush() {
-    set(ref(db, 'fantascozia_v3'), databaseState);
-  }
+            // 2. Calcola le previsioni (Valore FLAT puro senza moltiplicatore 1.5x)
+            Object.values(predictions).forEach(pred => {
+                if (pred.status === 'success' && players[pred.user] !== undefined) {
+                    players[pred.user] += parseInt(pred.points || 0);
+                }
+            });
 
-  // --- NAVIGAZIONE ---
-  window.openTab = function(name) {
-    document.querySelectorAll('section, nav button').forEach(el => el.classList.remove('active'));
-    document.getElementById(name).classList.add('active');
-    document.getElementById('tab-' + name).classList.add('active');
-    updateUI();
-  };
+            renderLeaderboard();
+            renderPredictions(predictions);
+            renderEventsLog(events);
+        });
 
-  // --- PREVISIONI ---
-  document.getElementById('form-previsione').onsubmit = function(e) {
-    e.preventDefault();
-    const id = document.getElementById('edit-id').value;
-    const persona = document.getElementById('p-chi').value;
-    const cosa = document.getElementById('p-cosa').value;
-    const punti = parseFloat(document.getElementById('p-punti').value);
+        // --- RENDERING GRAFICO ---
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard');
+            
+            // Ordina i partecipanti
+            const sorted = Object.keys(players).map(name => ({
+                name: name,
+                score: players[name]
+            })).sort((a, b) => b.score - a.score);
 
-    if (id) {
-      const idx = databaseState.previsioni.findIndex(x => x.id == id);
-      if(idx !== -1) databaseState.previsioni[idx] = { ...databaseState.previsioni[idx], persona, cosa, punti };
-      document.getElementById('edit-id').value = "";
-      document.getElementById('p-btn').innerText = "Aggiungi";
-    } else {
-      if(databaseState.previsioni.filter(x => x.persona === persona).length >= 3) return alert("Massimo 3 previsioni!");
-      databaseState.previsioni.push({ id: Date.now(), persona, cosa, punti, accaduto: false });
-    }
-    this.reset(); dbPush();
-  };
+            container.innerHTML = sorted.map((p, index) => {
+                let badge = '';
+                if (index === 0) badge = '<span class="badge">👑 Re del Castello</span>';
+                if (index === 2) badge = '<span class="badge" style="background:#ff3333;color:white;">💩 Sottoposto</span>';
+                
+                return `
+                    <div class="leaderboard-rank">
+                        <span>#${index + 1} 🛡️ ${p.name} ${badge}</span>
+                        <span>${p.score} PT</span>
+                    </div>
+                `;
+            }).join('');
+        }
 
-  window.togglePrev = (id) => {
-    const p = databaseState.previsioni.find(x => x.id === id);
-    if(p) p.accaduto = !p.accaduto;
-    dbPush();
-  };
+        function renderPredictions(predictions) {
+            const list = document.getElementById('predictions-list');
+            list.innerHTML = '';
 
-  window.delPrev = (id) => {
-    databaseState.previsioni = databaseState.previsioni.filter(x => x.id !== id);
-    dbPush();
-  };
+            Object.keys(predictions).forEach(id => {
+                const p = predictions[id];
+                const li = document.createElement('li');
+                
+                let statusButtons = '';
+                if (!p.status) {
+                    statusButtons = `
+                        <div>
+                            <button onclick="resolvePrediction('${id}', 'success', ${p.points})" style="background:#00ffcc;color:#000;padding:3px 8px;font-size:0.8rem;box-shadow:none;">Avverata ✅</button>
+                            <button onclick="resolvePrediction('${id}', 'failed', 0)" style="background:#ff0055;padding:3px 8px;font-size:0.8rem;box-shadow:none;">Toppata ❌</button>
+                            <button class="btn-delete" onclick="deletePrediction('${id}')">🗑️</button>
+                        </div>
+                    `;
+                } else {
+                    statusButtons = `
+                        <span>
+                            ${p.status === 'success' ? '🟢 Avverata!' : '🔴 Fallita'}
+                            <button class="btn-delete" onclick="deletePrediction('${id}')" style="margin-left:10px;">🗑️</button>
+                        </span>
+                    `;
+                }
 
-  window.editPrev = (id) => {
-    const p = databaseState.previsioni.find(x => x.id === id);
-    if(!p) return;
-    document.getElementById('edit-id').value = p.id;
-    document.getElementById('p-chi').value = p.persona;
-    document.getElementById('p-cosa').value = p.cosa;
-    document.getElementById('p-punti').value = p.punti;
-    document.getElementById('p-btn').innerText = "Salva";
-    window.scrollTo(0,0);
-  };
+                li.innerHTML = `
+                    <span><strong>${p.user}</strong>: "${p.text}" (${p.points} pt)</span>
+                    ${statusButtons}
+                `;
+                list.appendChild(li);
+            });
+        }
 
-  // --- EVENTI ---
-  document.getElementById('form-crea-evento').onsubmit = function(e) {
-    e.preventDefault();
-    databaseState.eventi.push({ id: Date.now(), nome: document.getElementById('e-nome').value, punti: parseInt(document.getElementById('e-punti').value) });
-    this.reset(); dbPush();
-  };
+        function renderEventsLog(events) {
+            const log = document.getElementById('events-log');
+            log.innerHTML = '';
 
-  window.delEv = (id) => {
-    databaseState.eventi = databaseState.eventi.filter(x => x.id !== id);
-    dbPush();
-  };
+            // Mostra dal più recente al più vecchio
+            Object.keys(events).reverse().forEach(id => {
+                const e = events[id];
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span><strong>${e.user}</strong>: ${e.text} (<code>${e.points >= 0 ? '+' : ''}${e.points} pt</code>)</span>
+                    <button class="btn-delete" onclick="deleteEvent('${id}')">Annulla ❌</button>
+                `;
+                log.appendChild(li);
+            });
+        }
 
-  document.getElementById('form-assegna').onsubmit = function(e) {
-    e.preventDefault();
-    const evId = document.getElementById('sel-evento').value;
-    const chi = document.getElementById('sel-chi').value;
-    const ev = databaseState.eventi.find(x => x.id == evId);
-    if(!ev) return;
-    databaseState.log.unshift({ id: Date.now(), chi, cosa: ev.nome, punti: ev.punti });
-    dbPush();
-  };
+        // --- AZIONI SCRITTURA DATABASE ---
+        function addPrediction() {
+            const user = document.getElementById('prediction-user').value;
+            const text = document.getElementById('prediction-text').value.trim();
+            
+            if(!text) return alert("Inserisci una profezia degna di Merlino!");
 
-  window.undoLog = (id) => {
-    databaseState.log = databaseState.log.filter(x => x.id !== id);
-    dbPush();
-  };
+            // Controllo limite 3 profezie
+            db.ref('predictions').once('value', (snap) => {
+                const all = snap.val() || {};
+                const userCount = Object.values(all).filter(p => p.user === user).length;
 
-  // --- AGGIORNAMENTO INTERFACCIA ---
-  function updateUI() {
-    // Previsioni
-    document.getElementById('lista-previsioni').innerHTML = databaseState.previsioni.map(p => `
-      <tr>
-        <td><strong>${p.persona}</strong></td><td>${p.cosa}</td><td>${p.punti}</td>
-        <td><button class="pill-btn btn-toggle ${p.accaduto?'':'off'}" onclick="togglePrev(${p.id})">${p.accaduto?'✅':'❌'}</button></td>
-        <td>
-          <button class="pill-btn btn-edit" onclick="editPrev(${p.id})">✏️</button>
-          <button class="pill-btn btn-del" onclick="delPrev(${p.id})">🗑️</button>
-        </td>
-      </tr>
-    `).join('');
+                if(userCount >= 3) {
+                    alert(`Ferma! ${user} ha già predetto il futuro 3 volte!`);
+                    return;
+                }
 
-    // Eventi disponibili
-    document.getElementById('lista-eventi-disponibili').innerHTML = databaseState.eventi.map(e => `
-      <tr><td>${e.nome}</td><td>${e.punti}</td><td><button class="pill-btn btn-del" onclick="delEv(${e.id})">🗑️</button></td></tr>
-    `).join('');
+                // Richiesta punteggio flat
+                const points = prompt("Quanti punti vale questa profezia se si avvera?", "15");
+                if(!points || isNaN(points)) return;
 
-    // Menu a tendina
-    document.getElementById('sel-evento').innerHTML = databaseState.eventi.map(e => `<option value="${e.id}">${e.nome} (${e.punti} pt)</option>`).join('');
+                db.ref('predictions').push({
+                    user: user,
+                    text: text,
+                    points: parseInt(points),
+                    status: ""
+                });
 
-    // Cronologia (Log)
-    document.getElementById('log-eventi').innerHTML = databaseState.log.map(l => `
-      <div class="log-item">
-        <span><strong>${l.chi}</strong>: ${l.cosa} (+${l.punti})</span>
-        <button class="pill-btn btn-del" style="font-size:0.7rem; padding:2px 8px;" onclick="undoLog(${l.id})">Annulla</button>
-      </div>
-    `).join('');
+                document.getElementById('prediction-text').value = "";
+            });
+        }
 
-    // Classifica
-    let stats = {};
-    partecipanti.forEach(p => stats[p] = { ev: 0, pr: 0, nOk: 0, tot: 0 });
+        function resolvePrediction(id, status, points) {
+            db.ref(`predictions/${id}`).update({ status: status });
+        }
 
-    databaseState.log.forEach(l => { if(stats[l.chi]) stats[l.chi].ev += l.punti; });
-    databaseState.previsioni.forEach(p => {
-      if(p.accaduto && stats[p.persona]) {
-        stats[p.persona].pr += (p.punti * 1.5);
-        stats[p.persona].nOk += 1;
-      }
-    });
-    partecipanti.forEach(p => stats[p].tot = stats[p].ev + stats[p].pr);
+        function deletePrediction(id) {
+            if(confirm("Eliminare questa profezia dagli annali?")) {
+                db.ref(`predictions/${id}`).remove();
+            }
+        }
 
-    document.getElementById('corpo-classifica').innerHTML = partecipanti.map(p => `
-      <tr><td><strong>${p}</strong></td><td>${stats[p].ev} pt</td><td>${stats[p].pr.toFixed(1)} pt</td><td><strong>${stats[p].tot.toFixed(1)} pt</strong></td></tr>
-    `).join('');
+        function addEvent() {
+            const user = document.getElementById('event-user').value;
+            const text = document.getElementById('event-text').value.trim();
+            const points = document.getElementById('event-points').value;
 
-    let mvp = { nome: '-', punti: -1 }, bestE = { nome: '-', punti: -1 }, bestV = { nome: '-', n: -1 };
-    partecipanti.forEach(p => {
-      if(stats[p].tot > mvp.punti) mvp = { nome: p, punti: stats[p].tot };
-      if(stats[p].ev > bestE.punti) bestE = { nome: p, punti: stats[p].ev };
-      if(stats[p].nOk > bestV.n) bestV = { nome: p, n: stats[p].nOk };
-    });
+            if(!text || !points) return alert("Riempi tutti i campi!");
 
-    document.getElementById('mvp-nome').innerText = mvp.nome;
-    document.getElementById('mvp-punti').innerText = mvp.punti.toFixed(1) + " pt";
-    document.getElementById('bp-nome').innerText = bestE.nome;
-    document.getElementById('bp-punti').innerText = bestE.punti + " pt";
-    document.getElementById('veg-nome').innerText = bestV.nome;
-    document.getElementById('veg-punti').innerText = bestV.n + " indovinate";
-  }
-</script>
+            db.ref('events').push({
+                user: user,
+                text: text,
+                points: parseInt(points)
+            });
+
+            document.getElementById('event-text').value = "";
+        }
+
+        function deleteEvent(id) {
+            if(confirm("Cancellare questo evento? I punti verranno istantaneamente ricalcolati.")) {
+                db.ref(`events/${id}`).remove();
+            }
+        }
+    </script>
 </body>
 </html>
