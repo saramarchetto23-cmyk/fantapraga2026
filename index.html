@@ -25,7 +25,7 @@
             background-attachment: fixed;
             color: #fff;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
         }
 
         .container {
@@ -33,22 +33,23 @@
             margin: 0 auto;
         }
 
-        /* Header Scoppiettante BEN CENTRATO */
+        /* Header Scoppiettante BEN CENTRATO E REATTIVO PER TELEFONI */
         header {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 30px;
+            padding: 20px 10px;
             background: linear-gradient(45deg, var(--scotland-blue), var(--primary));
             border: 4px solid var(--secondary);
             border-radius: 20px;
             box-shadow: 0 0 25px rgba(255, 0, 85, 0.6);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             position: relative;
             overflow: hidden;
             animation: pulse 2s infinite alternate;
+            word-wrap: break-word;
         }
 
         @keyframes pulse {
@@ -58,16 +59,18 @@
 
         header h1 {
             font-family: 'Cinzel Decorative', serif;
-            font-size: 2.8rem;
+            /* Dimensione dinamica: si rimpicciolisce automaticamente sui telefoni */
+            font-size: clamp(1.6rem, 6vw, 2.8rem);
             margin: 0;
             color: #fff;
-            text-shadow: 3px 3px 0px #000, 0 0 10px var(--secondary);
-            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #000, 0 0 10px var(--secondary);
+            letter-spacing: 1px;
             width: 100%;
+            box-sizing: border-box;
         }
 
         header p {
-            font-size: 1.2rem;
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
             color: var(--secondary);
             text-shadow: 1px 1px 2px #000;
             margin: 10px 0 0 0;
@@ -80,7 +83,7 @@
             background: rgba(20, 10, 35, 0.85);
             border: 3px solid var(--scotland-blue);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 25px;
             box-shadow: 5px 5px 0px var(--primary);
             backdrop-filter: blur(5px);
@@ -88,6 +91,7 @@
 
         h2 {
             font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.1rem, 4.5vw, 1.5rem);
             color: var(--secondary);
             border-bottom: 2px dashed var(--primary);
             padding-bottom: 10px;
@@ -97,24 +101,39 @@
             gap: 10px;
         }
 
-        /* Leaderboard Trash Style */
+        /* Leaderboard compatta per non andare mai a capo */
         .leaderboard-rank {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: linear-gradient(90deg, rgba(0,101,191,0.3), rgba(255,0,85,0.3));
-            padding: 15px;
+            padding: 12px 8px;
             margin: 10px 0;
             border-radius: 10px;
             border-left: 5px solid var(--secondary);
-            font-size: 1.3rem;
+            font-size: clamp(0.95rem, 3.8vw, 1.3rem);
             font-weight: bold;
             transition: 0.3s;
+            gap: 5px;
         }
 
         .leaderboard-rank:hover {
-            transform: translateX(10px) scale(1.02);
+            transform: translateX(5px) scale(1.01);
             background: linear-gradient(90deg, var(--scotland-blue), var(--primary));
+        }
+
+        .leaderboard-name-zone {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .leaderboard-score-zone {
+            flex-shrink: 0;
+            white-space: nowrap;
         }
 
         /* Form e Input */
@@ -127,6 +146,7 @@
             color: white;
             font-size: 1rem;
             margin: 5px 0;
+            box-sizing: border-box;
         }
 
         input:focus, select:focus {
@@ -165,10 +185,11 @@
         }
 
         .btn-action {
-            padding: 4px 10px;
+            padding: 5px 8px;
             font-size: 0.8rem;
             box-shadow: none;
-            margin-left: 4px;
+            margin-left: 2px;
+            margin-right: 2px;
         }
 
         /* Liste e Log */
@@ -179,29 +200,40 @@
 
         li {
             background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
+            padding: 12px 8px;
             margin: 8px 0;
             border-radius: 8px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
             border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media(min-width: 480px) {
+            li {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
 
         .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
         }
 
+        /* Badge rimpicciolito anti-capo */
         .badge {
             background: gold;
             color: black;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 5px;
-            font-size: 0.8rem;
+            font-size: clamp(0.65rem, 2.5vw, 0.8rem);
             font-weight: bold;
             text-transform: uppercase;
+            white-space: nowrap;
+            display: inline-block;
             animation: flash 1s infinite alternate;
         }
 
@@ -211,7 +243,7 @@
         }
 
         .trash-icon {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             vertical-align: middle;
         }
     </style>
@@ -224,7 +256,7 @@
 
     <div class="container">
         <header>
-            <h1>🏰 FantaScozia 2026 🏰</h1>
+            <h1>GK 🏰 FantaScozia 2026 🏰</h1>
             <p>🎺 Il torneo scozzese più trash della storia 🎺</p>
         </header>
 
@@ -239,7 +271,7 @@
         <!-- 2. GESTIONE PREVISIONI -->
         <div class="card">
             <h2>🔮 Libro delle Profezie <span class="trash-icon">🦄</span></h2>
-            <p style="font-size: 0.9rem; color: #aaa;">Massimo 3 previsioni a testa. Niente moltiplicatori, 1 punto assegnato è 1 punto reale!</p>
+            <p style="font-size: 0.85rem; color: #aaa;">Massimo 3 previsioni a testa. Niente moltiplicatori, 1 punto assegnato è 1 punto reale!</p>
             <div class="grid-3">
                 <div>
                     <label>Chi vaticina?</label>
@@ -250,8 +282,8 @@
                     </select>
                 </div>
                 <div>
-                    <label>La Profezia (Cosa succederà?)</label>
-                    <input type="text" id="prediction-text" placeholder="Es: Luca si perde nelle Highlands" style="width: 90%;">
+                    <label>La Profezia</label>
+                    <input type="text" id="prediction-text" placeholder="Es: Luca si perde" style="width: 100%;">
                 </div>
                 <div>
                     <label>&nbsp;</label>
@@ -276,11 +308,11 @@
                 </div>
                 <div>
                     <label>Cosa è successo di trash?</label>
-                    <input type="text" id="event-text" placeholder="Es: Beve whisky da una cornamusa" style="width: 90%;">
+                    <input type="text" id="event-text" placeholder="Es: Beve whisky da una cornamusa" style="width: 100%;">
                 </div>
                 <div>
                     <label>Punti (+ o -)</label>
-                    <input type="number" id="event-points" value="10" style="width: 80%;">
+                    <input type="number" id="event-points" value="10" style="width: 100%;">
                 </div>
             </div>
             <button onclick="addEvent()" style="width: 100%; margin-top: 15px;">Scatena Evento 🔥</button>
@@ -294,7 +326,7 @@
     </div>
 
     <script>
-        // --- CONFIGURAZIONE FIREBASE AGGIORNATA ---
+        // --- CONFIGURAZIONE FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyD3vgcN1g_K_8N1gJUYKp569RvHVm0ZF3o",
             authDomain: "fantascozia.firebaseapp.com",
@@ -357,8 +389,13 @@
                 
                 return `
                     <div class="leaderboard-rank">
-                        <span>#${index + 1} 🛡️ ${p.name} ${badge}</span>
-                        <span>${p.score} PT</span>
+                        <div class="leaderboard-name-zone">
+                            <span>#${index + 1} 🛡️ ${p.name}</span> 
+                            ${badge}
+                        </div>
+                        <div class="leaderboard-score-zone">
+                            <span>${p.score} PT</span>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -375,7 +412,7 @@
                 let statusButtons = '';
                 if (!p.status) {
                     statusButtons = `
-                        <div>
+                        <div style="white-space: nowrap;">
                             <button class="btn-action" onclick="resolvePrediction('${id}', 'success')" style="background:#00ffcc;color:#000;">Avverata ✅</button>
                             <button class="btn-action" onclick="resolvePrediction('${id}', 'failed')" style="background:#ff0055;">Toppata ❌</button>
                             <button class="btn-delete" onclick="deletePrediction('${id}')">🗑️</button>
@@ -383,7 +420,7 @@
                     `;
                 } else {
                     statusButtons = `
-                        <div>
+                        <div style="white-space: nowrap;">
                             <span>${p.status === 'success' ? '🟢 Avverata!' : '🔴 Fallita'}</span>
                             <button class="btn-delete" onclick="deletePrediction('${id}')" style="margin-left:10px;">🗑️</button>
                         </div>
@@ -409,7 +446,7 @@
                 let statusButtons = '';
                 if (!e.status) {
                     statusButtons = `
-                        <div>
+                        <div style="white-space: nowrap;">
                             <button class="btn-action" onclick="resolveEvent('${id}', 'success')" style="background:#00ffcc;color:#000;">Compiuto ✅</button>
                             <button class="btn-action" onclick="resolveEvent('${id}', 'failed')" style="background:#ff0055;">Fallito ❌</button>
                             <button class="btn-delete" onclick="deleteEvent('${id}')">🗑️</button>
@@ -417,7 +454,7 @@
                     `;
                 } else {
                     statusButtons = `
-                        <div>
+                        <div style="white-space: nowrap;">
                             <span>${e.status === 'success' ? '🟢 Successo' : '🔴 Fallito'}</span>
                             <button class="btn-delete" onclick="deleteEvent('${id}')" style="margin-left:10px;">🗑️</button>
                         </div>
@@ -483,12 +520,13 @@
                 user: user,
                 text: text,
                 points: parseInt(points),
-                status: "" // Parte in attesa
+                status: ""
             });
 
             document.getElementById('event-text').value = "";
         }
 
+        // Corretto per calcolare in tempo reale
         function resolveEvent(id, status) {
             db.ref(`events/${id}`).update({ status: status });
         }
