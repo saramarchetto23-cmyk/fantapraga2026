@@ -1,9 +1,342 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyD3vgcN1g_K_8N1gJUYKp569RvHVm0ZF3o",
-  authDomain: "fantascozia.firebaseapp.com",
-  projectId: "fantascozia",
-  storageBucket: "fantascozia.firebasestorage.app",
-  messagingSenderId: "659824105623",
-  appId: "1:659824105623:web:bbf87a1d10c7cd5564b1d2",
-  measurementId: "G-5C0HLJX16J"
-};
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏰 FantaScozia 2026 🏴󠁧󠁢󠁳󠁣󠁴󠁿</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      color: white; min-height: 100vh; position: relative;
+    }
+    header {
+      text-align: center; padding: 2rem 1rem;
+      background: rgba(255,255,255,0.06); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    h1 {
+      font-size: 2.4rem; background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    nav { display: flex; justify-content: center; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+    nav button {
+      padding: 0.6rem 1.3rem; background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25); color: white;
+      border-radius: 999px; cursor: pointer; transition: 0.2s;
+    }
+    nav button.active { background: rgba(255,255,255,0.4); }
+    main { padding: 1.5rem 1rem; max-width: 1100px; margin: 0 auto; }
+    section { display: none; }
+    section.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .glass {
+      background: rgba(255,255,255,0.10); backdrop-filter: blur(18px);
+      border-radius: 18px; border: 1px solid rgba(255,255,255,0.2);
+      padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    form { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+    input, select {
+      padding: 10px; border-radius: 8px; border: none;
+      background: rgba(0,0,0,0.4); color: white; flex: 1 1 150px;
+    }
+    button[type="submit"] {
+      padding: 10px 20px; border-radius: 8px; border: none;
+      background: #3a7bd5; color: white; cursor: pointer; font-weight: bold;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background: rgba(255,255,255,0.1); }
+    .pill-btn {
+      padding: 5px 12px; border-radius: 20px; border: none;
+      cursor: pointer; font-size: 0.8rem; font-weight: bold; margin: 2px;
+    }
+    .btn-del { background: #ff4757; color: white; }
+    .btn-edit { background: #f1c40f; color: black; }
+    .btn-toggle { background: #2ecc71; color: white; }
+    .btn-toggle.off { background: #555; }
+    .log { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; max-height: 180px; overflow-y: auto; }
+    .log-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #444; align-items: center; }
+    
+    .rankings { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; margin-bottom: 1rem; }
+    .rank { text-align: center; }
+    .rank h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+    .badge-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .badge-points { font-size: 0.9rem; opacity: 0.9; }
+    caption { text-align: left; font-weight: 600; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏰 FantaScozia 2026 🏴󠁧󠁢󠁳󠁣󠁴󠁿</h1>
+  <p>Sincronizzazione globale per Sara, Irene e Luca</p>
+  <nav>
+    <button onclick="openTab('previsioni')" id="tab-previsioni" class="active">🔮 Previsioni</button>
+    <button onclick="openTab('eventi')" id="tab-eventi">🎯 Eventi</button>
+    <button onclick="openTab('classifica')" id="tab-classifica">🏆 Classifica</button>
+  </nav>
+</header>
+
+<main>
+  <!-- PREVISIONI -->
+  <section id="previsioni" class="active">
+    <div class="glass">
+      <h2>🔮 Gestione Previsioni</h2>
+      <form id="form-previsione">
+        <input type="hidden" id="edit-id">
+        <select id="p-chi">
+          <option>Sara</option><option>Irene</option><option>Luca</option>
+        </select>
+        <input id="p-cosa" placeholder="Cosa succederà?" required>
+        <input id="p-punti" type="number" placeholder="Punti base" required>
+        <button type="submit" id="p-btn">Aggiungi</button>
+      </form>
+      <table>
+        <thead><tr><th>Chi</th><th>Previsioni</th><th>Punti</th><th>OK?</th><th>Azioni</th></tr></thead>
+        <tbody id="lista-previsioni"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- EVENTI -->
+  <section id="eventi">
+    <div class="glass">
+      <h2>🎯 Lista Eventi Disponibili</h2>
+      <form id="form-crea-evento">
+        <input id="e-nome" placeholder="Nome attività" required>
+        <input id="e-punti" type="number" placeholder="Punteggio" required>
+        <button type="submit">Crea Evento</button>
+      </form>
+      <table>
+        <thead><tr><th>Evento</th><th>Punti</th><th>Azione</th></tr></thead>
+        <tbody id="lista-eventi-disponibili"></tbody>
+      </table>
+    </div>
+
+    <div class="glass">
+      <h2>📝 Registra Attività Svolta</h2>
+      <form id="form-assegna">
+        <select id="sel-evento"></select>
+        <select id="sel-chi">
+          <option>Sara</option><option>Irene</option><option>Luca</option>
+        </select>
+        <button type="submit" style="background:#2ecc71">Registra + Punti</button>
+      </form>
+      <h3>Cronologia Azioni Live (Log)</h3>
+      <div id="log-eventi" class="log"></div>
+    </div>
+  </section>
+
+  <!-- CLASSIFICA -->
+  <section id="classifica">
+    <div class="rankings">
+      <div class="glass rank">
+        <h3>👑 MVP (Totale)</h3>
+        <div class="badge-name" id="mvp-nome">-</div>
+        <div class="badge-points" id="mvp-punti">0 pt</div>
+      </div>
+      <div class="glass rank">
+        <h3>⭐ Best Player (Eventi)</h3>
+        <div class="badge-name" id="bp-nome">-</div>
+        <div class="badge-points" id="bp-punti">0 pt</div>
+      </div>
+      <div class="glass rank">
+        <h3>🔮 Miglior Veggente</h3>
+        <div class="badge-name" id="veg-nome">-</div>
+        <div class="badge-points" id="veg-punti">0 indovinate</div>
+      </div>
+    </div>
+
+    <div class="glass">
+      <table>
+        <thead><tr><th>Partecipante</th><th>Punti Eventi</th><th>Punti Prev.</th><th>Totale</th></tr></thead>
+        <tbody id="corpo-classifica"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD3vgcN1g_K_8N1gJUYKp569RvHVm0ZF3o",
+    authDomain: "fantascozia.firebaseapp.com",
+    databaseURL: "https://fantascozia-default-rtdb.firebaseio.com",
+    projectId: "fantascozia",
+    storageBucket: "fantascozia.firebasestorage.app",
+    messagingSenderId: "659824105623",
+    appId: "1:659824105623:web:bbf87a1d10c7cd5564b1d2",
+    measurementId: "G-5C0HLJX16J"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let databaseState = { previsioni: [], eventi: [], log: [] };
+  const partecipanti = ['Sara', 'Irene', 'Luca'];
+
+  // Legge e ascolta TUTTO in tempo reale
+  onValue(ref(db, 'fantascozia_v3'), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      databaseState.previsioni = data.previsioni || [];
+      databaseState.eventi = data.eventi || [];
+      databaseState.log = data.log || [];
+    } else {
+      databaseState = { previsioni: [], eventi: [], log: [] };
+    }
+    updateUI();
+  });
+
+  function dbPush() {
+    set(ref(db, 'fantascozia_v3'), databaseState);
+  }
+
+  // --- NAVIGAZIONE ---
+  window.openTab = function(name) {
+    document.querySelectorAll('section, nav button').forEach(el => el.classList.remove('active'));
+    document.getElementById(name).classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    updateUI();
+  };
+
+  // --- PREVISIONI ---
+  document.getElementById('form-previsione').onsubmit = function(e) {
+    e.preventDefault();
+    const id = document.getElementById('edit-id').value;
+    const persona = document.getElementById('p-chi').value;
+    const cosa = document.getElementById('p-cosa').value;
+    const punti = parseFloat(document.getElementById('p-punti').value);
+
+    if (id) {
+      const idx = databaseState.previsioni.findIndex(x => x.id == id);
+      if(idx !== -1) databaseState.previsioni[idx] = { ...databaseState.previsioni[idx], persona, cosa, punti };
+      document.getElementById('edit-id').value = "";
+      document.getElementById('p-btn').innerText = "Aggiungi";
+    } else {
+      if(databaseState.previsioni.filter(x => x.persona === persona).length >= 3) return alert("Massimo 3 previsioni!");
+      databaseState.previsioni.push({ id: Date.now(), persona, cosa, punti, accaduto: false });
+    }
+    this.reset(); dbPush();
+  };
+
+  window.togglePrev = (id) => {
+    const p = databaseState.previsioni.find(x => x.id === id);
+    if(p) p.accaduto = !p.accaduto;
+    dbPush();
+  };
+
+  window.delPrev = (id) => {
+    databaseState.previsioni = databaseState.previsioni.filter(x => x.id !== id);
+    dbPush();
+  };
+
+  window.editPrev = (id) => {
+    const p = databaseState.previsioni.find(x => x.id === id);
+    if(!p) return;
+    document.getElementById('edit-id').value = p.id;
+    document.getElementById('p-chi').value = p.persona;
+    document.getElementById('p-cosa').value = p.cosa;
+    document.getElementById('p-punti').value = p.punti;
+    document.getElementById('p-btn').innerText = "Salva";
+    window.scrollTo(0,0);
+  };
+
+  // --- EVENTI ---
+  document.getElementById('form-crea-evento').onsubmit = function(e) {
+    e.preventDefault();
+    databaseState.eventi.push({ id: Date.now(), nome: document.getElementById('e-nome').value, punti: parseInt(document.getElementById('e-punti').value) });
+    this.reset(); dbPush();
+  };
+
+  window.delEv = (id) => {
+    databaseState.eventi = databaseState.eventi.filter(x => x.id !== id);
+    dbPush();
+  };
+
+  document.getElementById('form-assegna').onsubmit = function(e) {
+    e.preventDefault();
+    const evId = document.getElementById('sel-evento').value;
+    const chi = document.getElementById('sel-chi').value;
+    const ev = databaseState.eventi.find(x => x.id == evId);
+    if(!ev) return;
+    databaseState.log.unshift({ id: Date.now(), chi, cosa: ev.nome, punti: ev.punti });
+    dbPush();
+  };
+
+  window.undoLog = (id) => {
+    databaseState.log = databaseState.log.filter(x => x.id !== id);
+    dbPush();
+  };
+
+  // --- AGGIORNAMENTO INTERFACCIA ---
+  function updateUI() {
+    // Previsioni
+    document.getElementById('lista-previsioni').innerHTML = databaseState.previsioni.map(p => `
+      <tr>
+        <td><strong>${p.persona}</strong></td><td>${p.cosa}</td><td>${p.punti}</td>
+        <td><button class="pill-btn btn-toggle ${p.accaduto?'':'off'}" onclick="togglePrev(${p.id})">${p.accaduto?'✅':'❌'}</button></td>
+        <td>
+          <button class="pill-btn btn-edit" onclick="editPrev(${p.id})">✏️</button>
+          <button class="pill-btn btn-del" onclick="delPrev(${p.id})">🗑️</button>
+        </td>
+      </tr>
+    `).join('');
+
+    // Eventi disponibili
+    document.getElementById('lista-eventi-disponibili').innerHTML = databaseState.eventi.map(e => `
+      <tr><td>${e.nome}</td><td>${e.punti}</td><td><button class="pill-btn btn-del" onclick="delEv(${e.id})">🗑️</button></td></tr>
+    `).join('');
+
+    // Menu a tendina
+    document.getElementById('sel-evento').innerHTML = databaseState.eventi.map(e => `<option value="${e.id}">${e.nome} (${e.punti} pt)</option>`).join('');
+
+    // Cronologia (Log)
+    document.getElementById('log-eventi').innerHTML = databaseState.log.map(l => `
+      <div class="log-item">
+        <span><strong>${l.chi}</strong>: ${l.cosa} (+${l.punti})</span>
+        <button class="pill-btn btn-del" style="font-size:0.7rem; padding:2px 8px;" onclick="undoLog(${l.id})">Annulla</button>
+      </div>
+    `).join('');
+
+    // Classifica
+    let stats = {};
+    partecipanti.forEach(p => stats[p] = { ev: 0, pr: 0, nOk: 0, tot: 0 });
+
+    databaseState.log.forEach(l => { if(stats[l.chi]) stats[l.chi].ev += l.punti; });
+    databaseState.previsioni.forEach(p => {
+      if(p.accaduto && stats[p.persona]) {
+        stats[p.persona].pr += (p.punti * 1.5);
+        stats[p.persona].nOk += 1;
+      }
+    });
+    partecipanti.forEach(p => stats[p].tot = stats[p].ev + stats[p].pr);
+
+    document.getElementById('corpo-classifica').innerHTML = partecipanti.map(p => `
+      <tr><td><strong>${p}</strong></td><td>${stats[p].ev} pt</td><td>${stats[p].pr.toFixed(1)} pt</td><td><strong>${stats[p].tot.toFixed(1)} pt</strong></td></tr>
+    `).join('');
+
+    let mvp = { nome: '-', punti: -1 }, bestE = { nome: '-', punti: -1 }, bestV = { nome: '-', n: -1 };
+    partecipanti.forEach(p => {
+      if(stats[p].tot > mvp.punti) mvp = { nome: p, punti: stats[p].tot };
+      if(stats[p].ev > bestE.punti) bestE = { nome: p, punti: stats[p].ev };
+      if(stats[p].nOk > bestV.n) bestV = { nome: p, n: stats[p].nOk };
+    });
+
+    document.getElementById('mvp-nome').innerText = mvp.nome;
+    document.getElementById('mvp-punti').innerText = mvp.punti.toFixed(1) + " pt";
+    document.getElementById('bp-nome').innerText = bestE.nome;
+    document.getElementById('bp-punti').innerText = bestE.punti + " pt";
+    document.getElementById('veg-nome').innerText = bestV.nome;
+    document.getElementById('veg-punti').innerText = bestV.n + " indovinate";
+  }
+</script>
+</body>
+</html>
