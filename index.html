@@ -17,7 +17,6 @@
         body {
             font-family: 'Space Grotesk', sans-serif;
             background-color: var(--dark-bg);
-            /* Sfondo Trash/Epico: Castelli e colline scozzesi medievali */
             background-image: 
                 linear-gradient(rgba(26, 13, 46, 0.85), rgba(26, 13, 46, 0.95)),
                 url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80');
@@ -34,8 +33,12 @@
             margin: 0 auto;
         }
 
-        /* Header Scoppiettante */
+        /* Header Scoppiettante BEN CENTRATO */
         header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             padding: 30px;
             background: linear-gradient(45deg, var(--scotland-blue), var(--primary));
@@ -60,6 +63,7 @@
             color: #fff;
             text-shadow: 3px 3px 0px #000, 0 0 10px var(--secondary);
             letter-spacing: 2px;
+            width: 100%;
         }
 
         header p {
@@ -68,6 +72,7 @@
             text-shadow: 1px 1px 2px #000;
             margin: 10px 0 0 0;
             font-weight: bold;
+            width: 100%;
         }
 
         /* Sezioni stile fortezza */
@@ -153,6 +158,17 @@
             box-shadow: 2px 2px 0 #000;
             padding: 5px 10px;
             font-size: 0.8rem;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-action {
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            box-shadow: none;
+            margin-left: 4px;
         }
 
         /* Liste e Log */
@@ -200,7 +216,7 @@
         }
     </style>
 
-    <!-- Firebase SDK standard -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
@@ -270,7 +286,7 @@
             <button onclick="addEvent()" style="width: 100%; margin-top: 15px;">Scatena Evento 🔥</button>
         </div>
 
-        <!-- 4. LOG CRONOLOGICO -->
+        <!-- 4. LOG CRONOLOGICO CON CONTROLLO STATO -->
         <div class="card">
             <h2>📜 Registro delle Gesta Scozzesi</h2>
             <ul id="events-log"></ul>
@@ -306,14 +322,14 @@
             // Reset punteggi
             players = { Sara: 0, Irene: 0, Luca: 0 };
 
-            // 1. Calcola i punti dagli eventi reali
+            // 1. Calcola i punti dagli eventi reali SOLO SE compiuti
             Object.values(events).forEach(evt => {
-                if (players[evt.user] !== undefined) {
+                if (evt.status === 'success' && players[evt.user] !== undefined) {
                     players[evt.user] += parseInt(evt.points || 0);
                 }
             });
 
-            // 2. Calcola le previsioni (Valore FLAT puro senza moltiplicatore 1.5x)
+            // 2. Calcola le previsioni SOLO SE compiute
             Object.values(predictions).forEach(pred => {
                 if (pred.status === 'success' && players[pred.user] !== undefined) {
                     players[pred.user] += parseInt(pred.points || 0);
@@ -329,7 +345,6 @@
         function renderLeaderboard() {
             const container = document.getElementById('leaderboard');
             
-            // Ordina i partecipanti
             const sorted = Object.keys(players).map(name => ({
                 name: name,
                 score: players[name]
@@ -361,17 +376,17 @@
                 if (!p.status) {
                     statusButtons = `
                         <div>
-                            <button onclick="resolvePrediction('${id}', 'success', ${p.points})" style="background:#00ffcc;color:#000;padding:3px 8px;font-size:0.8rem;box-shadow:none;">Avverata ✅</button>
-                            <button onclick="resolvePrediction('${id}', 'failed', 0)" style="background:#ff0055;padding:3px 8px;font-size:0.8rem;box-shadow:none;">Toppata ❌</button>
+                            <button class="btn-action" onclick="resolvePrediction('${id}', 'success')" style="background:#00ffcc;color:#000;">Avverata ✅</button>
+                            <button class="btn-action" onclick="resolvePrediction('${id}', 'failed')" style="background:#ff0055;">Toppata ❌</button>
                             <button class="btn-delete" onclick="deletePrediction('${id}')">🗑️</button>
                         </div>
                     `;
                 } else {
                     statusButtons = `
-                        <span>
-                            ${p.status === 'success' ? '🟢 Avverata!' : '🔴 Fallita'}
+                        <div>
+                            <span>${p.status === 'success' ? '🟢 Avverata!' : '🔴 Fallita'}</span>
                             <button class="btn-delete" onclick="deletePrediction('${id}')" style="margin-left:10px;">🗑️</button>
-                        </span>
+                        </div>
                     `;
                 }
 
@@ -387,13 +402,31 @@
             const log = document.getElementById('events-log');
             log.innerHTML = '';
 
-            // Mostra dal più recente al più vecchio
             Object.keys(events).reverse().forEach(id => {
                 const e = events[id];
                 const li = document.createElement('li');
+                
+                let statusButtons = '';
+                if (!e.status) {
+                    statusButtons = `
+                        <div>
+                            <button class="btn-action" onclick="resolveEvent('${id}', 'success')" style="background:#00ffcc;color:#000;">Compiuto ✅</button>
+                            <button class="btn-action" onclick="resolveEvent('${id}', 'failed')" style="background:#ff0055;">Fallito ❌</button>
+                            <button class="btn-delete" onclick="deleteEvent('${id}')">🗑️</button>
+                        </div>
+                    `;
+                } else {
+                    statusButtons = `
+                        <div>
+                            <span>${e.status === 'success' ? '🟢 Successo' : '🔴 Fallito'}</span>
+                            <button class="btn-delete" onclick="deleteEvent('${id}')" style="margin-left:10px;">🗑️</button>
+                        </div>
+                    `;
+                }
+
                 li.innerHTML = `
                     <span><strong>${e.user}</strong>: ${e.text} (<code>${e.points >= 0 ? '+' : ''}${e.points} pt</code>)</span>
-                    <button class="btn-delete" onclick="deleteEvent('${id}')">Annulla ❌</button>
+                    ${statusButtons}
                 `;
                 log.appendChild(li);
             });
@@ -406,7 +439,6 @@
             
             if(!text) return alert("Inserisci una profezia degna di Merlino!");
 
-            // Controllo limite 3 profezie
             db.ref('predictions').once('value', (snap) => {
                 const all = snap.val() || {};
                 const userCount = Object.values(all).filter(p => p.user === user).length;
@@ -416,7 +448,6 @@
                     return;
                 }
 
-                // Richiesta punteggio flat
                 const points = prompt("Quanti punti vale questa profezia se si avvera?", "15");
                 if(!points || isNaN(points)) return;
 
@@ -431,7 +462,7 @@
             });
         }
 
-        function resolvePrediction(id, status, points) {
+        function resolvePrediction(id, status) {
             db.ref(`predictions/${id}`).update({ status: status });
         }
 
@@ -451,14 +482,19 @@
             db.ref('events').push({
                 user: user,
                 text: text,
-                points: parseInt(points)
+                points: parseInt(points),
+                status: "" // Parte in attesa
             });
 
             document.getElementById('event-text').value = "";
         }
 
+        function resolveEvent(id, status) {
+            db.ref(`events/${id}`).update({ status: status });
+        }
+
         function deleteEvent(id) {
-            if(confirm("Cancellare questo evento? I punti verranno istantaneamente ricalcolati.")) {
+            if(confirm("Cancellare questo evento del tutto?")) {
                 db.ref(`events/${id}`).remove();
             }
         }
