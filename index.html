@@ -67,16 +67,13 @@
     .badge-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.2rem; }
     .badge-points { font-size: 0.9rem; opacity: 0.9; }
     caption { text-align: left; font-weight: 600; margin-bottom: 0.5rem; }
-
-    .sync-zone { display: flex; gap: 10px; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
-    .btn-sync { background: rgba(255,255,255,0.15); border: 1px dashed rgba(255,255,255,0.4); padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 500; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>🏰 FantaScozia 2026 🏴󠁧󠁢󠁳󠁣󠁴󠁿</h1>
-  <p>Punteggi, Previsioni e Classifiche per Sara, Irene e Luca</p>
+  <p>Punteggi sincroni per Sara, Irene e Luca</p>
   <nav>
     <button onclick="openTab('previsioni')" id="tab-previsioni" class="active">🔮 Previsioni</button>
     <button onclick="openTab('eventi')" id="tab-eventi">🎯 Eventi</button>
@@ -85,10 +82,10 @@
 </header>
 
 <main>
+  <!-- PREVISIONI -->
   <section id="previsioni" class="active">
     <div class="glass">
       <h2>🔮 Gestione Previsioni</h2>
-      <p style="font-size:0.85rem; opacity:0.8">Ogni partecipante può inserire fino a 3 previsioni. Bonus 1.5x se si avverano.</p>
       <form id="form-previsione">
         <input type="hidden" id="edit-id">
         <select id="p-chi">
@@ -99,17 +96,18 @@
         <button type="submit" id="p-btn">Aggiungi</button>
       </form>
       <table>
-        <thead><tr><th>Chi</th><th>Previsione</th><th>Punti Base</th><th>Accaduto?</th><th>Azioni</th></tr></thead>
+        <thead><tr><th>Chi</th><th>Previsioni</th><th>Punti</th><th>OK?</th><th>Azioni</th></tr></thead>
         <tbody id="lista-previsioni"></tbody>
       </table>
     </div>
   </section>
 
+  <!-- EVENTI -->
   <section id="eventi">
     <div class="glass">
       <h2>🎯 Lista Eventi Disponibili</h2>
       <form id="form-crea-evento">
-        <input id="e-nome" placeholder="Nome attività (es. Avvistato Nessie)" required>
+        <input id="e-nome" placeholder="Nome attività" required>
         <input id="e-punti" type="number" placeholder="Punteggio" required>
         <button type="submit">Crea Evento</button>
       </form>
@@ -128,73 +126,88 @@
         </select>
         <button type="submit" style="background:#2ecc71">Registra + Punti</button>
       </form>
-      <h3 style="margin-top:1rem;">Cronologia Azioni (Log Modificabile)</h3>
+      <h3>Cronologia Azioni Live</h3>
       <div id="log-eventi" class="log"></div>
     </div>
   </section>
 
+  <!-- CLASSIFICA -->
   <section id="classifica">
     <div class="rankings">
       <div class="glass rank">
         <h3>👑 MVP (Totale)</h3>
         <div class="badge-name" id="mvp-nome">-</div>
-        <div class="badge-points" id="mvp-punti">0 punti</div>
+        <div class="badge-points" id="mvp-punti">0 pt</div>
       </div>
       <div class="glass rank">
         <h3>⭐ Best Player (Eventi)</h3>
         <div class="badge-name" id="bp-nome">-</div>
-        <div class="badge-points" id="bp-punti">0 punti</div>
+        <div class="badge-points" id="bp-punti">0 pt</div>
       </div>
       <div class="glass rank">
         <h3>🔮 Miglior Veggente</h3>
         <div class="badge-name" id="veg-nome">-</div>
-        <div class="badge-points" id="veg-punti">0 giuste</div>
+        <div class="badge-points" id="veg-punti">0 indovinate</div>
       </div>
     </div>
 
     <div class="glass">
       <table>
-        <caption>Tabellone Generale</caption>
-        <thead>
-          <tr><th>Partecipante</th><th>Punti Eventi</th><th>Punti Previsioni</th><th>Totale</th></tr>
-        </thead>
+        <thead><tr><th>Partecipante</th><th>Punti Eventi</th><th>Punti Prev.</th><th>Totale</th></tr></thead>
         <tbody id="corpo-classifica"></tbody>
       </table>
     </div>
   </section>
-
-  <div class="sync-zone">
-    <button class="btn-sync" onclick="exportDati()">💾 Esporta Salvataggio</button>
-    <button class="btn-sync" onclick="document.getElementById('import-file').click()">📂 Importa Aggiornamento</button>
-    <input type="file" id="import-file" style="display:none" accept=".json" onchange="importDati(this)">
-  </div>
 </main>
 
-<script>
-  // --- STATO DATI ---
-  let previsioni = JSON.parse(localStorage.getItem('fs_prev') || '[]');
-  let eventi = JSON.parse(localStorage.getItem('fs_ev') || '[]');
-  let log = JSON.parse(localStorage.getItem('fs_log') || '[]');
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+ const firebaseConfig = {
+  apiKey: "AIzaSyD3vgcN1g_K_8N1gJUYKp569RvHVm0ZF3o",
+  authDomain: "fantascozia.firebaseapp.com",
+  projectId: "fantascozia",
+  storageBucket: "fantascozia.firebasestorage.app",
+  messagingSenderId: "659824105623",
+  appId: "1:659824105623:web:bbf87a1d10c7cd5564b1d2",
+  measurementId: "G-5C0HLJX16J"
+};
+
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let databaseState = { previsioni: [], eventi: [], log: [] };
   const partecipanti = ['Sara', 'Irene', 'Luca'];
 
-  function save() {
-    localStorage.setItem('fs_prev', JSON.stringify(previsioni));
-    localStorage.setItem('fs_ev', JSON.stringify(eventi));
-    localStorage.setItem('fs_log', JSON.stringify(log));
+  // Sincronizzazione in tempo reale dal Database
+  onValue(ref(db, 'fantascozia_data'), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      databaseState.previsioni = data.previsioni || [];
+      databaseState.eventi = data.eventi || [];
+      databaseState.log = data.log || [];
+    } else {
+      databaseState = { previsioni: [], eventi: [], log: [] };
+    }
     updateUI();
+  });
+
+  function dbPush() {
+    set(ref(db, 'fantascozia_data'), databaseState);
   }
 
-  // --- SEZIONI ---
+  // --- NAVIGAZIONE ---
   window.openTab = function(name) {
-    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('section, nav button').forEach(el => el.classList.remove('active'));
     document.getElementById(name).classList.add('active');
     document.getElementById('tab-' + name).classList.add('active');
     updateUI();
-  }
+  };
 
-  // --- LOGICA PREVISIONI ---
+  // --- PREVISIONI ---
   document.getElementById('form-previsione').onsubmit = function(e) {
     e.preventDefault();
     const id = document.getElementById('edit-id').value;
@@ -203,33 +216,31 @@
     const punti = parseFloat(document.getElementById('p-punti').value);
 
     if (id) {
-      const idx = previsioni.findIndex(x => x.id == id);
-      previsioni[idx].persona = persona;
-      previsioni[idx].cosa = cosa;
-      previsioni[idx].punti = punti;
+      const idx = databaseState.previsioni.findIndex(x => x.id == id);
+      if(idx !== -1) databaseState.previsioni[idx] = { ...databaseState.previsioni[idx], persona, cosa, punti };
       document.getElementById('edit-id').value = "";
       document.getElementById('p-btn').innerText = "Aggiungi";
     } else {
-      if(previsioni.filter(x => x.persona === persona).length >= 3) return alert("Massimo 3 previsioni a testa!");
-      previsioni.push({ id: Date.now(), persona, cosa, punti, accaduto: false });
+      if(databaseState.previsioni.filter(x => x.persona === persona).length >= 3) return alert("Massimo 3 previsioni!");
+      databaseState.previsioni.push({ id: Date.now(), persona, cosa, punti, accaduto: false });
     }
-    this.reset();
-    save();
+    this.reset(); dbPush();
   };
 
   window.togglePrev = (id) => {
-    const p = previsioni.find(x => x.id === id);
-    p.accaduto = !p.accaduto;
-    save();
+    const p = databaseState.previsioni.find(x => x.id === id);
+    if(p) p.accaduto = !p.accaduto;
+    dbPush();
   };
 
   window.delPrev = (id) => {
-    previsioni = previsioni.filter(x => x.id !== id);
-    save();
+    databaseState.previsioni = databaseState.previsioni.filter(x => x.id !== id);
+    dbPush();
   };
 
   window.editPrev = (id) => {
-    const p = previsioni.find(x => x.id === id);
+    const p = databaseState.previsioni.find(x => x.id === id);
+    if(!p) return;
     document.getElementById('edit-id').value = p.id;
     document.getElementById('p-chi').value = p.persona;
     document.getElementById('p-cosa').value = p.cosa;
@@ -238,75 +249,40 @@
     window.scrollTo(0,0);
   };
 
-  // --- LOGICA EVENTI ---
+  // --- EVENTI ---
   document.getElementById('form-crea-evento').onsubmit = function(e) {
     e.preventDefault();
-    eventi.push({ id: Date.now(), nome: document.getElementById('e-nome').value, punti: parseInt(document.getElementById('e-punti').value) });
-    this.reset();
-    save();
+    databaseState.eventi.push({ id: Date.now(), nome: document.getElementById('e-nome').value, punti: parseInt(document.getElementById('e-punti').value) });
+    this.reset(); dbPush();
   };
 
   window.delEv = (id) => {
-    eventi = eventi.filter(x => x.id !== id);
-    save();
+    databaseState.eventi = databaseState.eventi.filter(x => x.id !== id);
+    dbPush();
   };
 
   document.getElementById('form-assegna').onsubmit = function(e) {
     e.preventDefault();
     const evId = document.getElementById('sel-evento').value;
     const chi = document.getElementById('sel-chi').value;
-    const ev = eventi.find(x => x.id == evId);
+    const ev = databaseState.eventi.find(x => x.id == evId);
     if(!ev) return;
-    log.unshift({ id: Date.now(), chi, cosa: ev.nome, punti: ev.punti });
-    save();
+    databaseState.log.unshift({ id: Date.now(), chi, cosa: ev.nome, punti: ev.punti });
+    dbPush();
   };
 
   window.undoLog = (id) => {
-    log = log.filter(x => x.id !== id);
-    save();
+    databaseState.log = databaseState.log.filter(x => x.id !== id);
+    dbPush();
   };
 
-  // --- CONDIVISIONE / AGGIORNAMENTO DATI ---
-  window.exportDati = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({previsioni, eventi, log}));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "fantascozia_backup.json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  };
-
-  window.importDati = (input) => {
-    const reader = new FileReader();
-    reader.onload = function(){
-      try {
-        const data = JSON.parse(reader.result);
-        if(data.previsioni && data.eventi && data.log) {
-          previsioni = data.previsioni;
-          eventi = data.eventi;
-          log = data.log;
-          save();
-          alert("Dati aggiornati con successo!");
-        } else {
-          alert("File non valido.");
-        }
-      } catch (e) {
-        alert("Errore nel caricamento del file.");
-      }
-    };
-    reader.readAsText(input.files[0]);
-  };
-
-  // --- AGGIORNAMENTO INTERFACCIA E CLASSIFICHE ---
+  // --- AGGIORNAMENTO LIVE INTERFACCIA ---
   function updateUI() {
-    // Render Previsioni
-    document.getElementById('lista-previsioni').innerHTML = previsioni.map(p => `
+    // Previsioni
+    document.getElementById('lista-previsioni').innerHTML = databaseState.previsioni.map(p => `
       <tr>
-        <td><strong>${p.persona}</strong></td>
-        <td>${p.cosa}</td>
-        <td>${p.punti}</td>
-        <td><button class="pill-btn btn-toggle ${p.accaduto?'':'off'}" onclick="togglePrev(${p.id})">${p.accaduto?'✅ Sì':'❌ No'}</button></td>
+        <td><strong>${p.persona}</strong></td><td>${p.cosa}</td><td>${p.punti}</td>
+        <td><button class="pill-btn btn-toggle ${p.accaduto?'':'off'}" onclick="togglePrev(${p.id})">${p.accaduto?'✅':'❌'}</button></td>
         <td>
           <button class="pill-btn btn-edit" onclick="editPrev(${p.id})">✏️</button>
           <button class="pill-btn btn-del" onclick="delPrev(${p.id})">🗑️</button>
@@ -314,28 +290,28 @@
       </tr>
     `).join('');
 
-    // Render Eventi Creati
-    document.getElementById('lista-eventi-disponibili').innerHTML = eventi.map(e => `
+    // Eventi disponibili
+    document.getElementById('lista-eventi-disponibili').innerHTML = databaseState.eventi.map(e => `
       <tr><td>${e.nome}</td><td>${e.punti}</td><td><button class="pill-btn btn-del" onclick="delEv(${e.id})">🗑️</button></td></tr>
     `).join('');
 
-    // Select Eventi da assegnare
-    document.getElementById('sel-evento').innerHTML = eventi.map(e => `<option value="${e.id}">${e.nome} (${e.punti} pt)</option>`).join('');
+    // Select menu
+    document.getElementById('sel-evento').innerHTML = databaseState.eventi.map(e => `<option value="${e.id}">${e.nome} (${e.punti} pt)</option>`).join('');
 
-    // Log Attività
-    document.getElementById('log-eventi').innerHTML = log.map(l => `
+    // Log cronologia
+    document.getElementById('log-eventi').innerHTML = databaseState.log.map(l => `
       <div class="log-item">
-        <span><strong>${l.chi}</strong>: ${l.cosa} (+${l.punti} pt)</span>
-        <button class="pill-btn btn-del" style="font-size:0.7rem; padding: 2px 8px;" onclick="undoLog(${l.id})">Annulla</button>
+        <span><strong>${l.chi}</strong>: ${l.cosa} (+${l.punti})</span>
+        <button class="pill-btn btn-del" style="font-size:0.7rem; padding:2px 8px;" onclick="undoLog(${l.id})">Annulla</button>
       </div>
     `).join('');
 
-    // Conteggi Classifiche
+    // Classifica
     let stats = {};
     partecipanti.forEach(p => stats[p] = { ev: 0, pr: 0, nOk: 0, tot: 0 });
 
-    log.forEach(l => { if(stats[l.chi]) stats[l.chi].ev += l.punti; });
-    previsioni.forEach(p => {
+    databaseState.log.forEach(l => { if(stats[l.chi]) stats[l.chi].ev += l.punti; });
+    databaseState.previsioni.forEach(p => {
       if(p.accaduto && stats[p.persona]) {
         stats[p.persona].pr += (p.punti * 1.5);
         stats[p.persona].nOk += 1;
@@ -343,21 +319,11 @@
     });
     partecipanti.forEach(p => stats[p].tot = stats[p].ev + stats[p].pr);
 
-    // Tabella Finale
     document.getElementById('corpo-classifica').innerHTML = partecipanti.map(p => `
-      <tr>
-        <td><strong>${p}</strong></td>
-        <td>${stats[p].ev} pt</td>
-        <td>${stats[p].pr.toFixed(1)} pt</td>
-        <td><strong>${stats[p].tot.toFixed(1)} pt</strong></td>
-      </tr>
+      <tr><td><strong>${p}</strong></td><td>${stats[p].ev} pt</td><td>${stats[p].pr.toFixed(1)} pt</td><td><strong>${stats[p].tot.toFixed(1)} pt</strong></td></tr>
     `).join('');
 
-    // Assegnazione Badge Podio
-    let mvp = { nome: '-', punti: -1 };
-    let bestE = { nome: '-', punti: -1 };
-    let bestV = { nome: '-', n: -1 };
-
+    let mvp = { nome: '-', punti: -1 }, bestE = { nome: '-', punti: -1 }, bestV = { nome: '-', n: -1 };
     partecipanti.forEach(p => {
       if(stats[p].tot > mvp.punti) mvp = { nome: p, punti: stats[p].tot };
       if(stats[p].ev > bestE.punti) bestE = { nome: p, punti: stats[p].ev };
@@ -365,16 +331,12 @@
     });
 
     document.getElementById('mvp-nome').innerText = mvp.nome;
-    document.getElementById('mvp-punti').innerText = mvp.punti.toFixed(1) + " pt totali";
+    document.getElementById('mvp-punti').innerText = mvp.punti.toFixed(1) + " pt";
     document.getElementById('bp-nome').innerText = bestE.nome;
-    document.getElementById('bp-punti').innerText = bestE.punti + " pt eventi";
+    document.getElementById('bp-punti').innerText = bestE.punti + " pt";
     document.getElementById('veg-nome').innerText = bestV.nome;
     document.getElementById('veg-punti').innerText = bestV.n + " indovinate";
   }
-
-  // Esecuzione al caricamento
-  updateUI();
 </script>
-
 </body>
 </html>
